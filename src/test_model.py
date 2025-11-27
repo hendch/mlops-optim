@@ -1,17 +1,15 @@
-from src.model_pipeline import (
-    prepare_data,
-    train_model,
-    evaluate_model,
-    save_model,
-    load_model,
-)
+"""Script to load a trained model and evaluate it on the test set."""
 
-X_train, X_test, y_train, y_test = prepare_data("data/raw/dataAssurance(in).csv")
+from src.model_pipeline import prepare_data, load_model, evaluate_model
 
-gbr = train_model(X_train, y_train)
 
-save_model(gbr, "gradient_boost_model.joblib")
+def main() -> None:
+    """Load the model, prepare data and evaluate performance."""
+    data_path = "data/raw/data.csv"
+    x_train, x_test, y_train, y_test = prepare_data(data_path)  # noqa: F841
+    model = load_model("models/gradient_boost_model.joblib")
+    evaluate_model(model, x_test, y_test)
 
-loaded_model = load_model("gradient_boost_model.joblib")
 
-evaluate_model(gbr, X_test, y_test)
+if __name__ == "__main__":
+    main()

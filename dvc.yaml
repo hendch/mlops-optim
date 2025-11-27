@@ -1,0 +1,28 @@
+stages:
+  prepare:
+    cmd: .make-env/bin/python -m src.prepare_stage
+    deps:
+      - data/raw/data.csv
+      - src/model_pipeline.py
+      - src/prepare_stage.py
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: .make-env/bin/python -m src.train
+    deps:
+      - data/processed/train.csv
+      - src/train.py
+      - src/model_pipeline.py
+    outs:
+      - models/gradient_boost_model.joblib
+
+  evaluate:
+    cmd: .make-env/bin/python -m src.check_quality
+    deps:
+      - data/processed/test.csv
+      - models/gradient_boost_model.joblib
+      - src/check_quality.py
+    outs:
+      - results/metrics.json

@@ -1,0 +1,66 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: .make-env/bin/python -m src.prepare_stage
+    deps:
+    - path: data/raw/data.csv
+      hash: md5
+      md5: 95145a9c9aeebb7bcabbe52fd5771641
+      size: 64587
+    - path: src/model_pipeline.py
+      hash: md5
+      md5: 39f881391e368516bd23052222dd8957
+      size: 4207
+    - path: src/prepare_stage.py
+      hash: md5
+      md5: 3eab1354f19c0412cd35bad475da5f8c
+      size: 751
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 9dc6c60013159bcba7f358b9c85ec90e
+      size: 39726
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 9010a1ebc10e11bed09519b0ea4f07fa
+      size: 158496
+  train:
+    cmd: .make-env/bin/python -m src.train
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 9010a1ebc10e11bed09519b0ea4f07fa
+      size: 158496
+    - path: src/model_pipeline.py
+      hash: md5
+      md5: 39f881391e368516bd23052222dd8957
+      size: 4207
+    - path: src/train.py
+      hash: md5
+      md5: 403815e4f18f1e21d1098d72c3c1dfd6
+      size: 495
+    outs:
+    - path: models/gradient_boost_model.joblib
+      hash: md5
+      md5: ff4eeb1f4119fbb5e4474c4234333238
+      size: 141480
+  evaluate:
+    cmd: .make-env/bin/python -m src.check_quality
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 9dc6c60013159bcba7f358b9c85ec90e
+      size: 39726
+    - path: models/gradient_boost_model.joblib
+      hash: md5
+      md5: ff4eeb1f4119fbb5e4474c4234333238
+      size: 141480
+    - path: src/check_quality.py
+      hash: md5
+      md5: a28f28eca628e7a1436f8637f112a482
+      size: 934
+    outs:
+    - path: results/metrics.json
+      hash: md5
+      md5: e3e6c7ffc648a564c0ece3010de6c0ec
+      size: 94

@@ -1,0 +1,10 @@
+[MESSAGES CONTROL]
+disable=
+    C,  # Convention (style)
+    R,  # Refactor suggestions
+    W,  # Warnings
+
+enable=
+    E,  # Errors
+    F   # Fatal errors
+
