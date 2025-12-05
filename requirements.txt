@@ -8,3 +8,6 @@ bandit
 pytest
 ruff
 dvc
+fastapi
+uvicorn
+httpx

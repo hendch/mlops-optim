@@ -76,4 +76,19 @@ ci:
 	@$(MAKE) flake8
 	@$(MAKE) bandit
 	@$(MAKE) dvc-repro
+	@$(MAKE) api-test
 	@echo "✅ CI pipeline finished successfully."
+#webhook using ngrok
+.PHONY: webhook
+
+webhook:
+	@echo "🌐 Starting webhook server on http://localhost:8000 ..."
+	@$(ENV_NAME)/bin/uvicorn src.webhook:app --host 0.0.0.0 --port 8000
+
+#fastAPI
+api:
+	@echo "🚀 Starting FastAPI server..."
+	$(ENV_NAME)/bin/uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
+api-test:
+	@echo "🌐 Running API tests..."
+	$(ENV_NAME)/bin/pytest tests/test_api.py
