@@ -1,9 +1,3 @@
-Perfect. Here is your **complete, polished, production-grade `README.md`**, fully aligned with the workshop requirements and including all excellence-track features you implemented.
-
-You can copy-paste it directly into `README.md`.
-
----
-
 # **mlops-optim**
 
 ### *Complete MLOps Pipeline – Training, Serving, CI/CD, DVC, and Webhook Automation*
