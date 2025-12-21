@@ -4,6 +4,16 @@ ENV_NAME=.make-env
 REQUIREMENTS=requirements.txt
 SRC_DIR=src
 TEST_DIR=tests
+IMAGE_NAME=ml-docker-app
+# --- MLflow configuration ---
+MLFLOW_HOST ?= 127.0.0.1
+MLFLOW_PORT ?= 5000
+
+# If you're using SQLite backend store (recommended for consistency)
+MLFLOW_BACKEND_URI ?= sqlite:///mlflow.db
+
+# If you want artifacts in a dedicated folder (optional)
+MLFLOW_ARTIFACT_ROOT ?= ./mlrunsCONTAINER_NAME=ml-app
 
 # Environment configuration
 setup:
@@ -92,3 +102,53 @@ api:
 api-test:
 	@echo "🌐 Running API tests..."
 	$(ENV_NAME)/bin/pytest tests/test_api.py
+#docker
+build:
+	docker build -t $(IMAGE_NAME)
+run:
+	docker run -d -p 5000:5000 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+clean:
+	docker stop $(CONTAINER_NAME) || true
+	docker rm $(CONTAINER_NAME) || true
+
+#MLFlow
+.PHONY: mlflow-ui mlflow-ui-bg mlflow-clean mlflow-open train-mlflow
+
+mlflow-ui:
+	@echo "Starting MLflow UI at http://$(MLFLOW_HOST):$(MLFLOW_PORT)"
+	mlflow ui \
+		--backend-store-uri $(MLFLOW_BACKEND_URI) \
+		--host $(MLFLOW_HOST) \
+		--port $(MLFLOW_PORT)
+
+# Background start (useful if you want the terminal back)
+mlflow-ui-bg:
+	@echo "Starting MLflow UI in background at http://$(MLFLOW_HOST):$(MLFLOW_PORT)"
+	nohup mlflow ui \
+		--backend-store-uri $(MLFLOW_BACKEND_URI) \
+		--host $(MLFLOW_HOST) \
+		--port $(MLFLOW_PORT) \
+		> mlflow-ui.log 2>&1 & echo $$! > mlflow-ui.pid
+	@echo "MLflow PID: $$(cat mlflow-ui.pid) (logs: mlflow-ui.log)"
+
+mlflow-clean:
+	rm -f mlflow.db mlflow.db-shm mlflow.db-wal
+	rm -rf mlruns
+	rm -f mlflow-ui.log mlflow-ui.pid
+
+# Train and log to MLflow (uses your existing target)
+train-mlflow: train
+	@echo "Training completed. View MLflow at http://$(MLFLOW_HOST):$(MLFLOW_PORT)"
+
+# Optional: one command to start UI then train (UI blocks; good in 2 terminals)
+run-mlflow: mlflow-ui
+
+mlflow-stop:
+	@if [ -f mlflow-ui.pid ]; then kill $$(cat mlflow-ui.pid); fi
+
+#elastic search
+monitoring-up:
+	docker compose -f docker-compose.monitoring.yml up -d
+
+monitoring-down:
+	docker compose -f docker-compose.monitoring.yml down

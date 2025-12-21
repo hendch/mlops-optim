@@ -1,20 +1,23 @@
 # src/app.py
+import os
+
+import joblib
+import numpy as np
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import numpy as np
-import joblib
-import os
 
 MODEL_PATH = "models/gradient_boost_model.joblib"
 
 
 class PredictionRequest(BaseModel):
     """Input schema for prediction."""
+
     features: list[float]
 
 
 class PredictionResponse(BaseModel):
     """Output schema for prediction."""
+
     prediction: float
 
 

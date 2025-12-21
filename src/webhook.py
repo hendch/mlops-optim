@@ -1,6 +1,7 @@
 """Webhook server to trigger the CI pipeline remotely."""
 
 import subprocess  # nosec B404  # Bandit: subprocess is used intentionally and safely
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 

@@ -1,7 +1,9 @@
 """DVC stage script to prepare data and save it."""
 
 from pathlib import Path
+
 import pandas as pd
+
 from src.model_pipeline import prepare_data
 
 

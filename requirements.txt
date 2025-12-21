@@ -11,3 +11,6 @@ dvc
 fastapi
 uvicorn
 httpx
+flask
+mlflow
+elasticsearch>=8.0.0

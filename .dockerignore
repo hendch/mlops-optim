@@ -1,0 +1,29 @@
+# Git / VCS
+.git
+.gitignore
+
+# Local Python environments
+.venv
+.make-env
+env/
+venv/
+
+# IDE / editor
+.vscode
+.idea
+*.swp
+
+# __pycache__ and compiled files
+__pycache__/
+*.pyc
+*.pyo
+
+# Data / artifacts you don't need in the image
+data/
+results/
+.dvc/
+.dvcignore
+
+# Other local stuff
+*.log
+Dockerfile*

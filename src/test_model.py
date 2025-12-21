@@ -1,6 +1,6 @@
 """Script to load a trained model and evaluate it on the test set."""
 
-from src.model_pipeline import prepare_data, load_model, evaluate_model
+from src.model_pipeline import evaluate_model, load_model, prepare_data
 
 
 def main() -> None:

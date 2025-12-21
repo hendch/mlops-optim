@@ -1,5 +1,6 @@
 # tests/test_api.py
 from fastapi.testclient import TestClient
+
 from src.app import app
 
 client = TestClient(app)
@@ -30,4 +31,3 @@ def test_predict_valid_payload():
     body = response.json()
     assert "prediction" in body
     assert isinstance(body["prediction"], (int, float))
-

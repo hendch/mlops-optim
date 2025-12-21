@@ -2,8 +2,10 @@
 
 import sys
 from pathlib import Path
+
 import pandas as pd
-from src.model_pipeline import load_model, evaluate_model
+
+from src.model_pipeline import evaluate_model, load_model
 
 
 def main() -> None:
